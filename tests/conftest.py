@@ -32,15 +32,6 @@ def browser_type_launch_args():
 
     args = []
 
-    # macOS-specific fixes for Chromium crashes
-    if platform.system() == "Darwin":  # macOS
-        args.extend([
-            "--disable-gpu",
-            "--disable-dev-shm-usage",
-            "--disable-software-rasterizer",
-            "--disable-extensions"
-        ])
-
     # Add maximize in headed mode
     if not HEADLESS:
         args.append("--start-fullscreen")
@@ -195,11 +186,3 @@ def pytest_configure(config):
     # Set default browser from .env if not specified via command line
     if not config.option.browser:
         config.option.browser = [BROWSER_TYPE]
-
-        # Set parallel workers from .env if -n flag not already set
-        from config.settings import PARALLEL_WORKERS
-        if hasattr(config.option, 'numprocesses'):
-            if config.option.numprocesses is None and PARALLEL_WORKERS > 1:
-                config.option.numprocesses = PARALLEL_WORKERS
-                config.option.dist = "loadscope"
-                logger.info(f"Parallel execution enabled: {PARALLEL_WORKERS} workers")
