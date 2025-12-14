@@ -14,7 +14,6 @@ from config.settings import (
     SCREENSHOT_ON_FAILURE
 )
 from pages.home_page import HomePage
-from pages.trade_page import TradePage
 from pages.why_multibank_page import WhyMultibankPage
 
 # Configure logging
@@ -79,20 +78,6 @@ def home_page(page: Page) -> HomePage:
     """
     logger.info(f"Creating HomePage object")
     return HomePage(page, BASE_URL)
-
-@pytest.fixture(scope="function")
-def trade_page(page: Page) -> TradePage:
-    """
-    Fixture for TradePage object.
-
-    Args:
-        page: Playwright Page fixture
-
-    Returns:
-        TradePage instance
-    """
-    logger.info(f"Creating TradePage object")
-    return TradePage(page, BASE_URL)
 
 @pytest.fixture(scope="function")
 def why_multibank_page(page: Page) -> WhyMultibankPage:
@@ -182,6 +167,8 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "trading: Trading functionality tests")
     config.addinivalue_line("markers", "content: Content validation tests")
     config.addinivalue_line("markers", "cross_browser: Cross-browser tests")
+    config.addinivalue_line("markers", "accessibility: Accessibility tests")
+    config.addinivalue_line("markers", "performance: Performance tests")
 
     # Set default browser from .env if not specified via command line
     if not config.option.browser:
