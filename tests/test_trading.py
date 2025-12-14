@@ -14,10 +14,6 @@ logger = logging.getLogger(__name__)
 class TestTrading:
     """Test suite for the trading functionality."""
 
-    #TODO: Add TCs for the Trading functionality:
-    # 1. Spot trading section displays trading pairs across different categories
-    # 2. Trading pair data structure and presentation is correct
-
     def test_trade_spot_trading_categories_display(self, loaded_home_page: HomePage, test_data: dict):
         """
         Verify trading categories are matching

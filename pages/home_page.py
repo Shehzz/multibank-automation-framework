@@ -31,7 +31,7 @@ class HomePage(BasePage):
         """Navigate to the home page and wait for it to load."""
         #logger.info(f"Loading home page: {self.base_url}")
         self.navigate(self.base_url)
-        #TODO: Can pick any 1, starting from the slowest (8s, 4s, 3s) to the fastest
+        # Can pick any 1, starting from the slowest (8s, 4s, 3s) to the fastest
         # self.wait_until_page_fully_loads()
         self.wait_for_load_state("domcontentloaded")
         self.wait_until_loaded(selector=self.locators.trading_pairs)
