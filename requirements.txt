@@ -1,0 +1,18 @@
+# Core Testing Framework
+pytest==7.4.3
+pytest-playwright==0.4.3
+playwright==1.57.0
+
+# Test Reporting
+pytest-html==4.1.1
+allure-pytest==2.13.2
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
+setuptools==80.9.0
+pytest-xdist==3.8.0
+pytest-rerunfailures==16.1
+
+# Code Quality
+pytest-cov==4.1.0
