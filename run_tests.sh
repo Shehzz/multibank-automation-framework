@@ -16,7 +16,7 @@ PYTEST_CMD="pytest"
 # Add parallel workers if > 1
 if [ "$WORKERS" -gt 1 ]; then
     echo "🚀 Running tests with $WORKERS parallel workers..."
-    PYTEST_CMD="$PYTEST_CMD -n $WORKERS --dist loadscope"
+    PYTEST_CMD="$PYTEST_CMD -n $WORKERS --dist load"
 else
     echo "🔄 Running tests sequentially..."
 fi
@@ -32,6 +32,17 @@ echo "📝 Command: $PYTEST_CMD $@"
 echo ""
 $PYTEST_CMD "$@"
 EXIT_CODE=$?
+
+# Generate Allure report if allure is installed and results exist
+if command -v allure &> /dev/null && [ -d "reports/allure-results" ] && [ "$(ls -A reports/allure-results)" ]; then
+    echo ""
+    echo "📊 Generating Allure report..."
+    allure generate reports/allure-results -o reports/allure-report --clean &> /dev/null
+    if [ $? -eq 0 ]; then
+        echo "✓ Allure report generated: reports/allure-report/index.html"
+        echo "  View with: allure serve reports/allure-results"
+    fi
+fi
 
 # Print summary
 echo ""
