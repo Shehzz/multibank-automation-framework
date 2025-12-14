@@ -25,8 +25,11 @@ This framework implements the Page Object Model (POM) design pattern with **exte
 - **Build Automation**: setup.py, pyproject.toml, and Makefile (like Maven/Gradle)
 - **Data-Driven**: External test data management (no hard-coded assertions)
 - **Smart Waits**: Auto-waiting with Playwright (no flaky time.sleep())
-- **Rich Reporting**: HTML reports with screenshots on failure
+- **Rich Reporting**: HTML reports + Allure reports with screenshots on failure
+- **Accessibility Testing**: WCAG 2.1 compliance checks using axe-core
+- **Performance Testing**: Automated page load and resource optimization metrics
 - **CI/CD Ready**: GitHub Actions workflow included
+- **Parallel Execution**: Configurable parallel test execution via .env
 - **Professional Logging**: Comprehensive logging for debugging
 - **Type Hints**: Python type annotations throughout
 
@@ -34,10 +37,14 @@ This framework implements the Page Object Model (POM) design pattern with **exte
 
 ```
 multibank-automation-framework/
+├── .github/                    # CI/CD configuration
+│   └── workflows/
+│       └── test-automation.yml # GitHub Actions workflow
 ├── Makefile                    # Build commands (make test, make build)
 ├── requirements.txt            # Python dependencies
 ├── pytest.ini                  # Pytest configuration
 ├── run_tests.sh                # Bash script to run tests
+├── view_allure_report.sh      # Allure report viewer script
 ├── .env.example               # Environment variables template
 ├── config/                     # Configuration files
 │   ├── settings.py            # Framework settings
@@ -46,30 +53,33 @@ multibank-automation-framework/
 ├── pages/                      # Page Object Model classes
 │   ├── base_page.py           # Base page with common methods
 │   ├── home_page.py           # Home page object
-│   ├── trade_page.py          # Trade page object
 │   ├── why_multibank_page.py  # Why Multibank page object
 │   └── __init__.py
 ├── resources/                  # External resources
 │   └── locators/              # ⭐ Locators stored separately (PROD-ready)
 │       ├── locators.json      # All page locators (XPath)
 │       ├── home_locators.py   # Home page locator class
-│       ├── trade_locators.py   # Trade page locator class
 │       └── why_multibank_locators.py  # Why Multibank page locator class
 ├── tests/                      # Test cases
 │   ├── conftest.py            # Pytest fixtures
 │   ├── test_navigation.py     # Navigation tests
 │   ├── test_content.py        # Content validation tests
 │   ├── test_trading.py        # Trade tests
+│   ├── test_accessibility.py  # Accessibility (WCAG) tests
+│   ├── test_performance.py    # Performance & load time tests
 │   ├── test_string_frequency.py # Unit tests for Task 2
 │   └── __init__.py
 ├── utils/                      # Utility functions
 │   ├── string_frequency.py    # String frequency counter (Task 2)
 │   ├── locator_reader.py      # Locator JSON reader
 │   ├── test_data_reader.py      # Test data JSON reader
+│   ├── accessibility.py       # Accessibility testing utilities
+│   ├── performance.py         # Performance testing utilities
 │   └── __init__.py
 ├── reports/                    # Test execution reports
-├── screenshots/                # Screenshots on failure
-└── test-results/              # Playwright test results
+│   ├── allure-results/        # Allure JSON results
+│   └── allure-report/         # Allure HTML reports
+└── screenshots/                # Screenshots on failure
 ```
 
 ## 🚀 Quick Start
@@ -125,13 +135,30 @@ make help
    playwright install
    ```
 
-4. **Configure environment** (optional)
+4. **Install Allure (Optional - for advanced reporting)**
+   ```bash
+   # macOS
+   brew install allure
+   
+   # Linux
+   sudo apt-add-repository ppa:qameta/allure
+   sudo apt-get update
+   sudo apt-get install allure
+   
+   # Or download binary from:
+   # https://github.com/allure-framework/allure2/releases
+   ```
+   
+   > **Note:** `allure-pytest` (Python package) is already in `requirements.txt`.  
+   > The `allure` CLI tool is needed only to **view** the reports.
+
+5. **Configure environment** (optional)
    ```bash
    cp .env.example .env
    # Edit .env with your preferences
    ```
 
-5. **Verify installation**
+6. **Verify installation**
    ```bash
    pytest tests/test_string_frequency.py -v
    ```
@@ -166,6 +193,19 @@ make clean             # Clean build artifacts
 # Utilities
 make browsers          # Install Playwright browsers
 make check             # Verify installation
+```
+
+### Using setup.py
+
+```bash
+# Install framework
+pip install -e .
+
+# Install with dev dependencies
+pip install -e ".[dev]"
+
+# Build distribution
+python setup.py sdist bdist_wheel
 ```
 
 ## 🧪 Running Tests
@@ -223,6 +263,132 @@ pytest --browser chromium --browser firefox
 pytest --html=reports/report.html --self-contained-html
 ```
 
+## 📊 Advanced Reporting with Allure
+
+### Setup Allure (One-Time)
+
+The `allure-pytest` Python package is already installed via `requirements.txt`. You just need the Allure CLI tool:
+
+```bash
+# macOS
+brew install allure
+
+# Linux
+sudo apt-add-repository ppa:qameta/allure
+sudo apt-get update
+sudo apt-get install allure
+
+# Verify installation
+allure --version
+```
+
+### Make Scripts Executable (First Time Only)
+
+```bash
+chmod +x run_tests.sh
+chmod +x view_allure_report.sh
+```
+
+### Viewing Allure Reports
+
+**Option 1: Automatic (Recommended)**
+```bash
+# Run tests and view report
+./run_tests.sh tests/
+./view_allure_report.sh
+# Opens interactive report in browser automatically
+```
+
+**Option 2: Manual**
+```bash
+# Run tests (generates JSON results)
+./run_tests.sh tests/
+
+# Serve interactive report
+allure serve reports/allure-results
+
+# OR generate static HTML
+allure generate reports/allure-results -o reports/allure-report --clean
+open reports/allure-report/index.html
+```
+
+### Allure Report Features
+
+- 📈 **Test execution trends** - Track pass/fail rates over time
+- ⏱️ **Duration metrics** - See which tests are slowest
+- 📸 **Screenshots & videos** - Attached to failed tests automatically
+- 🏷️ **Categorization** - Tests grouped by markers and features
+- 📊 **Beautiful graphs** - Visual analytics and timelines
+- 🔍 **Detailed logs** - Step-by-step execution details
+
+**Full documentation:** `docs/ALLURE_SETUP.md`
+
+## ♿ Accessibility Testing
+
+The framework includes automated accessibility testing using **axe-core** for WCAG 2.1 compliance:
+
+```bash
+# Run all accessibility tests
+./run_tests.sh -m accessibility
+
+# Run specific test
+./run_tests.sh tests/test_accessibility.py::TestAccessibility::test_home_page_accessibility
+```
+
+**What it checks:**
+- ✅ Color contrast ratios
+- ✅ Keyboard navigation
+- ✅ Screen reader compatibility
+- ✅ ARIA labels and roles
+- ✅ Form accessibility
+- ✅ Image alt text
+- ✅ Heading structure
+
+**Example output:**
+```
+Accessibility Results:
+  ✓ Passed checks: 47
+  ⚠️ Violations: 2
+  [MODERATE] Images must have alternate text
+    More info: https://dequeuniversity.com/rules/axe/4.8/image-alt
+```
+
+## ⚡ Performance Testing
+
+Automated performance metrics and assertions:
+
+```bash
+# Run all performance tests
+./run_tests.sh -m performance
+
+# Run specific test
+./run_tests.sh tests/test_performance.py::TestPerformance::test_home_page_load_time
+```
+
+**Metrics measured:**
+- ⏱️ Page load time (< 10s)
+- 🚀 Time to Interactive (< 6s)
+- 🌐 DNS lookup time
+- 🔌 TCP connection time
+- 📥 Request/response time
+- 📦 Resource counts (scripts, images, etc.)
+
+**Example output:**
+```
+Performance Metrics:
+  DNS Lookup: 45ms
+  TCP Connect: 67ms
+  Request Time: 123ms
+  Response Time: 234ms
+  DOM Load: 456ms
+  Page Load: 2341ms
+  Time to Interactive: 1876ms
+  
+✓ Homepage loaded in 2.34s
+```
+
+**Full documentation:** `docs/BONUS_FEATURES.md`
+
 ### Using Environment Variables
 
 ```bash
@@ -246,6 +412,20 @@ Tests are organized using pytest markers:
 - `@pytest.mark.trading` - Trading functionality tests
 - `@pytest.mark.content` - Content validation tests
 - `@pytest.mark.cross_browser` - Cross-browser compatibility tests
+- `@pytest.mark.accessibility` - Accessibility compliance tests (WCAG 2.1)
+- `@pytest.mark.performance` - Performance and load time tests
+
+**Run tests by marker:**
+```bash
+# Accessibility tests
+./run_tests.sh -m accessibility
+
+# Performance tests
+./run_tests.sh -m performance
+
+# Both accessibility and performance
+./run_tests.sh -m "accessibility or performance"
+```
 
 ## ⚙️ Configuration
 
@@ -569,6 +749,29 @@ make build
 ✅ **Screenshot on Failure** - Visual debugging  
 ✅ **Cross-Browser Testing** - Multi-browser support  
 ✅ **CI/CD Ready** - GitHub Actions integration  
+✅ **Allure Reporting** - Advanced test analytics and trends  
+✅ **Accessibility Testing** - WCAG 2.1 compliance checks  
+✅ **Performance Testing** - Automated performance metrics  
+✅ **Parallel Execution** - Configurable parallel test runs  
+
+## 📚 Documentation
+
+- **Getting Started** - This README
+- **Allure Setup** - `docs/ALLURE_SETUP.md`
+- **Bonus Features** - `docs/BONUS_FEATURES.md` (Accessibility, Performance, CI/CD)
+- **Parallel Testing** - `docs/PARALLEL_TESTING_GUIDE.md`
+- **Execution Flow** - `docs/PARALLEL_EXECUTION_FLOW.md`
+
+## 🎁 Bonus Features
+
+This framework includes several advanced features:
+
+- **CI/CD Pipeline Integration** - GitHub Actions with multi-browser testing
+- **Advanced Reporting** - Allure reports with execution trends and analytics
+- **Accessibility Testing** - Automated WCAG 2.1 compliance checks
+- **Performance Testing** - Page load time and resource optimization metrics
+
+See `docs/BONUS_FEATURES.md` for detailed documentation.
 
 ## 👥 Author
 
