@@ -1,0 +1,45 @@
+{
+  "navigation": {
+    "expected_menu_items": [
+      "Dashboard",
+      "Markets",
+      "Trade",
+      "Features",
+      "About Us",
+      "Support"
+    ]
+  },
+  "trade": {
+    "nav-categories": [
+      "Spot",
+      "Instant Buy",
+      "Panic Sell",
+      "Convert"
+    ],
+    "pair-categories": [
+      "All",
+      "USDT",
+      "BTC",
+      "FIAT"
+    ],
+    "spot_trade_url": "https://trade.multibank.io/trade/BTC_USD"
+  },
+  "content": {
+    "download_links": {
+      "app_store_pattern": "https://apps.apple.com/ae/app/multibank-io-buy-btc-crypto/id1592119946",
+      "google_play_pattern": "https://play.google.com/store/apps/details?id=com.multibank.app&pli=1"
+    },
+    "banner_expected": {
+      "should_exist": true,
+      "minimum_count": 1
+    }
+  },
+  "why_multibank": {
+    "expected_sections": [
+      "Why Choose Us",
+      "Features",
+      "Security"
+    ],
+    "url": "https://multibank.io/en-AE"
+  }
+}
