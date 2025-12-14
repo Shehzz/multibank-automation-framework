@@ -111,15 +111,23 @@ class BasePage:
         logger.info(f"Waiting for element '{locator}' to be {state}")
         self.page.locator(locator).first.wait_for(state=state, timeout=self.timeout)
 
-    def scroll_to_element(self, locator: str):
+    def scroll_to_element(self, locator: str, align_to_top: bool = True):
         """
-        Scroll element into view.
+        Scroll the page so element appears at the top of viewport.
 
         Args:
-            locator: CSS selector or other locator string
+            locator: XPath or CSS selector
+            align_to_top: If True, align element to top of viewport
         """
-        logger.info(f"Scrolling to element: {locator}")
-        self.page.locator(locator).first.scroll_into_view_if_needed(timeout=self.timeout)
+        logger.info(f"Scrolling page to element: {locator}")
+        element = self.page.locator(locator).first
+
+        # Use JavaScript scrollIntoView for reliable scrolling
+        block = "start" if align_to_top else "center"
+        element.evaluate(f"el => el.scrollIntoView({{ behavior: 'smooth', block: '{block}' }})")
+
+        # Wait for smooth scroll animation
+        self.page.wait_for_timeout(300)
 
     def get_attribute(self, locator: str, attribute: str) -> str:
         """
@@ -271,6 +279,21 @@ class BasePage:
         """
         return self.page.locator(locator).count()
 
+    def get_visible_element_count(self, locator: str) -> int:
+        """
+        Get count of VISIBLE elements matching the locator.
+        Filters out hidden elements.
+
+        Args:
+            locator: CSS selector or XPath locator string
+
+        Returns:
+            Number of visible elements
+        """
+        all_elements = self.page.locator(locator).all()
+        visible_count = sum(1 for el in all_elements if el.is_visible())
+        return visible_count
+
     def wait_for_url(self, url_pattern: str):
         """
         Wait for URL to match a pattern.
@@ -280,3 +303,20 @@ class BasePage:
         """
         logger.info(f"Waiting for URL: {url_pattern}")
         self.page.wait_for_url(url_pattern, timeout=self.timeout)
+
+    @staticmethod
+    def normalize_ui_text(text: str) -> str:
+        """
+        Normalizes UI-extracted text by collapsing all whitespace (incl. newlines)
+        into single spaces and trimming.
+        """
+        if not text:
+            return ""
+        return " ".join(text.split())
+
+    def ui_text(self, locator) -> str:
+        """
+        Convenience wrapper to read inner_text and normalize it.
+        Works with a Locator (not list).
+        """
+        return self.normalize_ui_text(locator.inner_text())
