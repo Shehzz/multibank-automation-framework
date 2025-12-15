@@ -317,8 +317,6 @@ open reports/allure-report/index.html
 - 📊 **Beautiful graphs** - Visual analytics and timelines
 - 🔍 **Detailed logs** - Step-by-step execution details
 
-**Full documentation:** `docs/ALLURE_SETUP.md`
-
 ## ♿ Accessibility Testing
 
 The framework includes automated accessibility testing using **axe-core** for WCAG 2.1 compliance:
@@ -382,8 +380,6 @@ Performance Metrics:
   
 ✓ Homepage loaded in 2.34s
 ```
-
-**Full documentation:** `docs/BONUS_FEATURES.md`
 
 ### Using Environment Variables
 
@@ -727,34 +723,22 @@ make build
 ✅ **Type Hints** - Better IDE support  
 ✅ **Comprehensive Logging** - Easy debugging  
 ✅ **Screenshot on Failure** - Visual debugging  
-✅ **Cross-Browser Testing** - Multi-browser support  
-✅ **CI/CD Ready** - GitHub Actions integration  
+✅ **Cross-Browser Testing** - Multi-browser support
 ✅ **Allure Reporting** - Advanced test analytics and trends  
 ✅ **Accessibility Testing** - WCAG 2.1 compliance checks  
 ✅ **Performance Testing** - Automated performance metrics  
-✅ **Parallel Execution** - Configurable parallel test runs  
-
-## 📚 Documentation
-
-- **Getting Started** - This README
-- **Allure Setup** - `docs/ALLURE_SETUP.md`
-- **Bonus Features** - `docs/BONUS_FEATURES.md` (Accessibility, Performance, CI/CD)
-- **Parallel Testing** - `docs/PARALLEL_TESTING_GUIDE.md`
-- **Execution Flow** - `docs/PARALLEL_EXECUTION_FLOW.md`
+✅ **Parallel Execution** - Configurable parallel test runs
 
 ## 🎁 Bonus Features
 
 This framework includes several advanced features:
 
-- **CI/CD Pipeline Integration** - GitHub Actions with multi-browser testing
 - **Advanced Reporting** - Allure reports with execution trends and analytics
 - **Accessibility Testing** - Automated WCAG 2.1 compliance checks
 - **Performance Testing** - Page load time and resource optimization metrics
-
-See `docs/BONUS_FEATURES.md` for detailed documentation.
 
 ## 👥 Author
 
 Shehzaan Ansari
 
-**Last Updated**: December 2025
+**Last Updated**: December, 2025
