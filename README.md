@@ -86,247 +86,76 @@ multibank-automation-framework/
 - pip (Python package manager)
 - Git
 
-### Step 1: Clone the Repository
+### Installation (4 Simple Steps)
 
 ```bash
+# 1. Clone the repository
 git clone https://github.com/Shehzz/multibank-automation-framework
 cd multibank-automation-framework
-```
 
-### Step 2: Choose Installation Method
-
-#### Option A: Using Makefile (Recommended)
-
-```bash
-# Complete setup (install + browsers)
+# 2. Run setup (installs dependencies + browsers)
 make setup
 
-# Run tests
-make test
+# 3. Configure environment variables
+cp .env.example .env
+# Edit .env file with your settings (browser, headless mode, etc.)
 
-# See all available commands
-make help
+# 4. Verify installation
+./run_tests.sh tests/test_string_frequency.py -v
 ```
 
-#### Option B: Manual Installation
+✅ **Installation complete!** You're ready to run tests.
 
-1. **Create virtual environment**
-   ```bash
-   python -m venv venv
-   
-   # On Windows:
-   venv\Scripts\activate
-   
-   # On macOS/Linux:
-   source venv/bin/activate
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Install Playwright browsers**
-   ```bash
-   playwright install
-   ```
-
-4. **Install Allure (Optional - for advanced reporting)**
-   ```bash
-   # macOS
-   brew install allure
-   
-   # Linux
-   sudo apt-add-repository ppa:qameta/allure
-   sudo apt-get update
-   sudo apt-get install allure
-   
-   # Or download binary from:
-   # https://github.com/allure-framework/allure2/releases
-   ```
-   
-   > **Note:** `allure-pytest` (Python package) is already in `requirements.txt`.  
-   > The `allure` CLI tool is needed only to **view** the reports.
-
-5. **Configure environment** (optional)
-   ```bash
-   cp .env.example .env
-   # Edit .env with your preferences
-   ```
-
-6. **Verify installation**
-   ```bash
-   pytest tests/test_string_frequency.py -v
-   ```
-
-## 🔧 Build Automation
-
-This framework includes **build automation** similar to Maven/Gradle/npm:
-
-### Using Makefile Commands
-
-```bash
-# Testing
-make test              # Run all tests
-make test-smoke        # Run smoke tests only
-make test-regression   # Run regression tests
-make test-parallel     # Run tests in parallel
-make test-firefox      # Run tests in Firefox
-make test-chromium     # Run tests in Chromium
-make test-cross-browser # Run on multiple browsers
-
-# Code Quality
-make lint              # Run code linting
-make format            # Format code with black
-make coverage          # Generate test coverage report
-
-# Build & Install
-make install           # Install dependencies
-make install-dev       # Install with dev dependencies
-make build             # Build distribution package
-make clean             # Clean build artifacts
-
-# Utilities
-make browsers          # Install Playwright browsers
-make check             # Verify installation
-```
-
-### Using setup.py
-
-```bash
-# Install framework
-pip install -e .
-
-# Install with dev dependencies
-pip install -e ".[dev]"
-
-# Build distribution
-python setup.py sdist bdist_wheel
-```
 
 ## 🧪 Running Tests
 
-### Using Test Runner Script (Recommended for Parallel Execution)
-```bash
-# Uses PARALLEL_WORKERS from .env automatically
-./run_tests.sh tests/test_navigation.py
+### ⚠️ IMPORTANT: Always use `./run_tests.sh`
 
-# Run all tests with parallel workers from .env
-./run_tests.sh
+**Do NOT use `pytest` directly** - the test runner script handles parallel execution, Allure reporting, and proper configuration.
 
-# Pass any pytest arguments
-./run_tests.sh tests/ -v -k "navigation"
-```
-
-### Using Makefile
-```bash
-make test                    # All tests
-make test-smoke             # Smoke tests only
-make test-navigation        # Navigation tests
-make test-parallel          # Parallel execution (uses .env PARALLEL_WORKERS)
-make quick-test             # Quick verification
-```
-
-### Using pytest Directly
+### Basic Usage
 
 ```bash
 # Run all tests
-pytest
-
-# Run with verbose output
-pytest -v
+./run_tests.sh
 
 # Run specific test file
-pytest tests/test_navigation.py
+./run_tests.sh tests/test_navigation.py
+
+# Run with verbose output
+./run_tests.sh tests/test_content.py -v
 
 # Run specific test
-pytest tests/test_navigation.py::TestNavigation::test_navigation_menu_displays
+./run_tests.sh tests/test_navigation.py::TestNavigation::test_navigation_menu_displays
 
 # Run by marker
-pytest -m smoke
-pytest -m regression
-pytest -m navigation
-
-# Run in specific browser
-pytest --browser firefox
-pytest --browser chromium
-pytest --browser webkit
-
-# Run cross-browser
-pytest --browser chromium --browser firefox
-
-# Generate HTML report
-pytest --html=reports/report.html --self-contained-html
-```
-
-## 📊 Advanced Reporting with Allure
-
-### Setup Allure (One-Time)
-
-The `allure-pytest` Python package is already installed via `requirements.txt`. You just need the Allure CLI tool:
-
-```bash
-# macOS
-brew install allure
-
-# Linux
-sudo apt-add-repository ppa:qameta/allure
-sudo apt-get update
-sudo apt-get install allure
-
-# Verify installation
-allure --version
-```
-
-### Make Scripts Executable (First Time Only)
-
-```bash
-chmod +x run_tests.sh
-chmod +x view_allure_report.sh
-```
-
-### Viewing Allure Reports
-
-**Option 1: Automatic (Recommended)**
-```bash
-# Run tests and view report
-./run_tests.sh tests/
-./view_allure_report.sh
-# Opens interactive report in browser automatically
-```
-
-**Option 2: Manual**
-```bash
-# Run tests (generates JSON results)
-./run_tests.sh tests/
-
-# Serve interactive report
-allure serve reports/allure-results
-
-# OR generate static HTML
-allure generate reports/allure-results -o reports/allure-report --clean
-open reports/allure-report/index.html
-```
-
-### Allure Report Features
-
-- 📈 **Test execution trends** - Track pass/fail rates over time
-- ⏱️ **Duration metrics** - See which tests are slowest
-- 📸 **Screenshots & videos** - Attached to failed tests automatically
-- 🏷️ **Categorization** - Tests grouped by markers and features
-- 📊 **Beautiful graphs** - Visual analytics and timelines
-- 🔍 **Detailed logs** - Step-by-step execution details
-
-## ♿ Accessibility Testing
-
-The framework includes automated accessibility testing using **axe-core** for WCAG 2.1 compliance:
-
-```bash
-# Run all accessibility tests
+./run_tests.sh -m smoke
+./run_tests.sh -m regression
 ./run_tests.sh -m accessibility
+```
 
-# Run specific test
-./run_tests.sh tests/test_accessibility.py::TestAccessibility::test_home_page_accessibility
+### Browser Selection
+
+```bash
+# Run in specific browser (overrides .env setting)
+./run_tests.sh --browser firefox
+./run_tests.sh --browser chromium
+./run_tests.sh --browser webkit
+
+# Run in multiple browsers
+./run_tests.sh --browser chromium --browser firefox
+```
+
+### Parallel Execution
+
+Parallel execution is **automatically configured** via the `.env` file:
+
+```bash
+# In .env file:
+PARALLEL_WORKERS=4
+
+# Then just run normally - parallelization happens automatically:
+./run_tests.sh tests/
 ```
 
 **What it checks:**
@@ -338,34 +167,21 @@ The framework includes automated accessibility testing using **axe-core** for WC
 - ✅ Image alt text
 - ✅ Heading structure
 
-**Example output:**
-```
-Accessibility Results:
-  ✓ Passed checks: 47
-  ⚠️ Violations: 2
-  [MODERATE] Images must have alternate text
-    More info: https://dequeuniversity.com/rules/axe/4.8/image-alt
-```
+## 📊 Viewing Test Reports
 
-## ⚡ Performance Testing
-
-Automated performance metrics and assertions:
+### Allure Reports (Recommended)
 
 ```bash
-# Run all performance tests
-./run_tests.sh -m performance
-
-# Run specific test
-./run_tests.sh tests/test_performance.py::TestPerformance::test_home_page_load_time
+# After running tests, view the interactive Allure report:
+./view_allure_report.sh
 ```
 
-**Metrics measured:**
-- ⏱️ Page load time (< 10s)
-- 🚀 Time to Interactive (< 6s)
-- 🌐 DNS lookup time
-- 🔌 TCP connection time
-- 📥 Request/response time
-- 📦 Resource counts (scripts, images, etc.)
+This opens a beautiful interactive report in your browser with:
+- 📈 Test execution trends
+- ⏱️ Duration metrics
+- 📸 Screenshots attached to failed tests
+- 🏷️ Test categorization
+- 📊 Visual analytics
 
 **Example output:**
 ```
@@ -383,15 +199,13 @@ Performance Metrics:
 
 ### Using Environment Variables
 
+### HTML Report (Alternative)
+
+The test runner also generates a simple HTML report:
 ```bash
-# Browser selection (.env file takes precedence)
-BROWSER=firefox pytest
-
-# Headless mode
-HEADLESS=true pytest
-
-# Slow motion (for debugging)
-SLOW_MO=500 pytest
+open reports/report.html  # macOS
+start reports/report.html # Windows
+xdg-open reports/report.html # Linux
 ```
 
 ## 🎨 Test Markers
@@ -421,26 +235,25 @@ Tests are organized using pytest markers:
 
 ## ⚙️ Configuration
 
-### Environment Variables
+### Environment Variables (.env)
 
-Configure the framework by setting environment variables in `.env` file:
+After running `cp .env.example .env`, configure these settings:
 
 ```bash
 # Application
 BASE_URL=https://trade.multibank.io/
 
 # Browser Settings
-BROWSER=firefox          # chromium, firefox, webkit (from .env or --browser flag)
-HEADLESS=false          # true for CI/CD
-SLOW_MO=0              # Slow down by milliseconds
+BROWSER=chromium           # chromium, firefox, webkit
+HEADLESS=false            # true for headless mode
 VIEWPORT_WIDTH=1920
 VIEWPORT_HEIGHT=1080
 
 # Timeouts (milliseconds)
 DEFAULT_TIMEOUT=30000
-NAVIGATION_TIMEOUT=30000
 
 # Test Execution
+PARALLEL_WORKERS=4        # Number of parallel test workers
 MAX_RETRIES=2
 
 # Screenshots
@@ -450,13 +263,66 @@ SCREENSHOT_ON_FAILURE=true
 LOG_LEVEL=INFO
 ```
 
-**Note**: Command line `--browser` flag overrides `.env` setting.
+### Test Data
 
-### Locator Management (Production Approach)
+Edit `config/test_data.json` to update expected values:
 
-**All locators are stored externally in JSON files** for easy maintenance:
+```json
+{
+  "navigation": {
+    "expected_menu_items": [
+      "Dashboard",
+      "Markets",
+      "Trade",
+      "Features",
+      "About Us",
+      "Support"
+    ]
+  },
+  "why_multibank": {
+    "content": {
+      "hero_slides": {
+        "slide_1": "Master the Market with a Champion's Mindset"
+      }
+    }
+  }
+}
+```
 
-#### locators.json
+---
+
+## 🎨 Test Markers
+
+Tests are organized using pytest markers:
+
+| Marker | Description |
+|--------|-------------|
+| `smoke` | Quick smoke tests for critical paths |
+| `regression` | Full regression test suite |
+| `navigation` | Navigation-related tests |
+| `trading` | Trading functionality tests |
+| `content` | Content validation tests |
+| `accessibility` | WCAG 2.1 accessibility tests |
+| `performance` | Performance and load time tests |
+
+**Example:**
+```bash
+# Run only accessibility tests
+./run_tests.sh -m accessibility
+
+# Run smoke + regression tests
+./run_tests.sh -m "smoke or regression"
+```
+
+---
+
+## 🏗️ Architecture
+
+### Page Object Model with External Locators
+
+This framework uses a **production-ready approach** with 3 separate layers:
+
+#### 1. **Locators (JSON)** - `resources/locators/locators.json`
 ```json
 {
   "Home Page": {
@@ -469,7 +335,7 @@ LOG_LEVEL=INFO
 }
 ```
 
-#### home_locators.py
+#### 2. **Locator Classes** - `resources/locators/home_locators.py`
 ```python
 class HomeLocators:
     def __init__(self):
@@ -477,87 +343,91 @@ class HomeLocators:
         self.nav_menu = locators["nav_menu"]["locator"]
 ```
 
-#### Usage in Page Objects
+#### 3. **Page Objects** - `pages/home_page.py`
 ```python
 class HomePage(BasePage):
     def __init__(self, page, base_url):
         super().__init__(page)
-        self.locators = HomeLocators()  # Load from JSON
+        self.locators = HomeLocators()
     
     def is_navigation_displayed(self):
-        return self.is_visible(self.locators.nav_menu)  # Use locator
+        return self.is_visible(self.locators.nav_menu)
 ```
 
-**Benefits**:
+#### 4. **Tests** - `tests/test_navigation.py`
+```python
+def test_navigation_menu(home_page):
+    home_page.load()
+    assert home_page.is_navigation_displayed()
+```
+
+**Benefits:**
 - ✅ No hardcoded locators in code
 - ✅ Easy to update (edit JSON file only)
 - ✅ Non-technical team members can update locators
-- ✅ Version control friendly
-- ✅ Production-ready approach
+- ✅ Production-ready architecture
 
 ### Test Data
 
-Edit `config/test_data.json` to update expected values:
+## 📝 Task 2: String Character Frequency
 
-```json
-{
-  "navigation": {
-    "expected_menu_items": ["Markets", "Trading", "About"]
-  }
-}
-```
+### Implementation
 
-## 📊 Reporting
+Located in `utils/string_frequency.py`:
 
-### HTML Report
-
-After test execution, view the HTML report:
-```bash
-open reports/report.html  # macOS
-start reports/report.html # Windows
-xdg-open reports/report.html # Linux
-```
-
-### Coverage Report
-
-Generate test coverage:
-```bash
-make coverage
-# View: htmlcov/index.html
-```
-
-### Screenshots
-
-Failed tests automatically capture screenshots in `screenshots/` directory.
-
-### Logs
-
-Detailed execution logs are saved in `reports/test_execution.log`.
-
-## 🏗️ Architecture & Design Decisions
-
-### Page Object Model (POM) with External Locators
-
-The framework implements **production-grade POM** with:
-
-1. **BasePage**: Common methods for all pages (click, fill, wait, etc.)
-2. **Specific Page Classes**: HomePage, TradingPage inherit from BasePage
-3. **External Locator Files**: All locators stored in `resources/locators/locators.json`
-4. **Locator Classes**: Type-safe access to locators (e.g., `HomeLocators`)
-5. **Separation of Concerns**: Test logic → Page Objects → Locators (3 layers)
-
-**Traditional POM** (hardcoded):
 ```python
-class HomePage:
-    NAV_MENU = "//nav"  # ❌ Hardcoded
+from utils.string_frequency import count_character_frequency
+
+result = count_character_frequency("hello world")
+print(result)  # Output: h:1, e:1, l:3, o:2,  :1, w:1, r:1, d:1
 ```
 
-**Our Approach** (externalized):
-```python
-class HomePage:
-    def __init__(self):
-        self.locators = HomeLocators()  # ✅ From JSON
+### Running
+
+```bash
+# Run the function directly
+python utils/string_frequency.py
+
+# Run unit tests
+./run_tests.sh tests/test_string_frequency.py -v
 ```
+
+---
+
+## 🎁 Bonus Features
+
+### Accessibility Testing
+
+Automated WCAG 2.1 compliance checks using **axe-core**:
+
+```bash
+# Run all accessibility tests
+./run_tests.sh -m accessibility
+```
+
+**Checks for:**
+- ✅ Color contrast ratios
+- ✅ Keyboard navigation
+- ✅ Screen reader compatibility
+- ✅ ARIA labels and roles
+- ✅ Form accessibility
+- ✅ Image alt text
+
+### Performance Testing
+
+Automated performance metrics and assertions:
+
+```bash
+# Run all performance tests
+./run_tests.sh -m performance
+```
+
+**Metrics measured:**
+- ⏱️ Page load time
+- 🚀 Time to Interactive
+- 🌐 DNS lookup time
+- 📥 Request/response time
+- 📦 Resource counts
 
 ### Why XPath Over CSS?
 
@@ -618,7 +488,7 @@ from pages.base_page import BasePage
 from resources.locators.new_page_locators import NewPageLocators
 
 class NewPage(BasePage):
-    def __init__(self, page, base_url):
+    def __init__(self, page):
         super().__init__(page)
         self.base_url = base_url
         self.locators = NewPageLocators()
@@ -627,19 +497,10 @@ class NewPage(BasePage):
         self.click(self.locators.submit_button)
 ```
 
-### 4. Add Fixture
+### 4. Write Test
 
 ```python
-@pytest.fixture
-def new_page(page):
-    from pages.new_page import NewPage
-    from config.settings import BASE_URL
-    return NewPage(page, BASE_URL)
-```
-
-### 5. Write Test
-
-```python
+# tests/test_new_page.py
 import pytest
 
 @pytest.mark.regression
@@ -649,59 +510,41 @@ def test_new_feature(new_page):
     assert True
 ```
 
+---
+
 ## 🛠️ Troubleshooting
 
-### Tests fail to start
-```bash
-# Verify installation
-make check
-
-# Reinstall
-make install
-```
-
-### Element not found errors
-- Update locators in `resources/locators/locators.json`
-- Increase timeout in settings.py
-- Use browser in headed mode: `HEADLESS=false pytest`
-
-### Browser launch fails
-```bash
-# Install browsers
-make browsers
-```
-
-### Build errors
-```bash
-# Clean and rebuild
-make clean
-make build
-```
-
-## 📝 Task 2: String Character Frequency
-
-### Implementation
-
-Located in `utils/string_frequency.py`:
-
-```python
-from utils.string_frequency import count_character_frequency
-
-result = count_character_frequency("hello world")
-print(result)  # Output: h:1, e:1, l:3, o:2,  :1, w:1, r:1, d:1
-```
-
-### Running
+### Installation Issues
 
 ```bash
-# Run the script
-python utils/string_frequency.py
+# If make setup fails, try manual installation:
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+playwright install
+```
 
-# Run tests
-pytest tests/test_string_frequency.py -v
+### Tests Fail to Start
 
-# Or using Makefile
-make run-string-frequency
+```bash
+# Verify .env file exists
+ls -la .env
+
+# If missing, copy from example
+cp .env.example .env
+```
+
+### Element Not Found Errors
+
+1. Check if locators in `resources/locators/locators.json` are correct
+2. Run in headed mode to see what's happening: `HEADLESS=false` in `.env`
+3. Increase timeout in `.env`: `DEFAULT_TIMEOUT=60000`
+
+### Browser Launch Fails
+
+```bash
+# Reinstall browsers
+playwright install
 ```
 
 ## 📦 Building Distribution Package
@@ -717,19 +560,16 @@ make build
 
 ✅ **External Locator Management** - All locators in JSON files  
 ✅ **XPath Locators** - Reliable element identification  
-✅ **Build Automation** - Makefile, setup.py, pyproject.toml  
 ✅ **Page Object Model** - Clean code organization  
 ✅ **Smart Waits** - No flaky time.sleep() calls  
-✅ **Type Hints** - Better IDE support  
+✅ **Type Hints** - Better IDE support and code clarity  
 ✅ **Comprehensive Logging** - Easy debugging  
-✅ **Screenshot on Failure** - Visual debugging  
-✅ **Cross-Browser Testing** - Multi-browser support
-✅ **Allure Reporting** - Advanced test analytics and trends  
-✅ **Accessibility Testing** - WCAG 2.1 compliance checks  
+✅ **Screenshot on Failure** - Attached to Allure reports  
+✅ **Cross-Browser Testing** - Multi-browser support  
+✅ **Allure Reporting** - Advanced test analytics  
+✅ **Accessibility Testing** - WCAG 2.1 compliance  
 ✅ **Performance Testing** - Automated performance metrics  
-✅ **Parallel Execution** - Configurable parallel test runs
-
-## 🎁 Bonus Features
+✅ **Parallel Execution** - Fast test execution  
 
 This framework includes several advanced features:
 
@@ -741,4 +581,4 @@ This framework includes several advanced features:
 
 Shehzaan Ansari
 
-**Last Updated**: December, 2025
+**Last Updated**: December 2025
