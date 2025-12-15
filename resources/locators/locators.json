@@ -1,0 +1,141 @@
+{
+  "Home Page": {
+    "nav_menu": {
+      "name": "Navigation Menu",
+      "locator": "//div[contains(@class, 'style_menu-container')]",
+      "type": "xpath"
+    },
+    "nav_items": {
+      "name": "Navigation Items",
+      "locator": "//div[contains(@class, 'style_menu-container')]//a | //div[contains(@class, 'style_menu-container')]//span[contains(@class, 'style_menu-item')]/div",
+      "type": "xpath"
+    },
+    "nav_item_by_text": {
+      "name": "Navigation Item by Text (template)",
+      "locator": "//div[contains(@class, 'style_menu-container')]//*[contains(text(), '{item_name}')]",
+      "type": "xpath"
+    },
+    "nav_dropdown_links": {
+      "name": "Dropdown Links for Navigation Item (template)",
+      "locator": "//div[contains(@class, 'style_menu-container')]//*[contains(text(), '{item_name}')]/ancestor::div[contains(@class, 'position-relative')]//a",
+      "type": "xpath"
+    },
+    "spot_trade": {
+      "name": "Spot Trade section",
+      "locator": "//span[contains(text(),'Spot')]",
+      "type": "xpath"
+    },
+    "category_tabs": {
+      "name": "Category Tabs",
+      "locator": "//div[contains(@class, 'style_list')]/button",
+      "type": "xpath"
+    },
+    "category_tab_name": {
+      "name": "Category Tab Name",
+      "locator": "//div[contains(@class, 'style_list')]/button/span[contains(text(),'{category_name}')]",
+      "type": "xpath"
+    },
+    "trading_pairs": {
+      "name": "Trading Pairs",
+      "locator": "//div[contains(@class,'style_table')]//tr[@id='-td']",
+      "type": "xpath"
+    },
+    "change_direction": {
+      "name": "24h Change Direction",
+      "locator": "//div[contains(@class, 'style_pill')]",
+      "type": "xpath"
+    },
+    "banner_section": {
+      "name": "Banner Section",
+      "locator": "//div[contains(@class,'style_horizontal-scroll')]//descendant::div[@class='slick-track']/div[contains(@class,'slick-slide')]",
+      "type": "xpath"
+    },
+    "banner_items": {
+      "name": "Banner Items",
+      "locator": "//div[@class='slick-track']/div[@data-index]",
+      "type": "xpath"
+    },
+    "app_store_link": {
+      "name": "App Store Download Link",
+      "locator": "//a[contains(@href, 'apps.apple.com')]",
+      "type": "xpath"
+    },
+    "google_play_link": {
+      "name": "Google Play Download Link",
+      "locator": "//a[contains(@href, 'play.google.com')]",
+      "type": "xpath"
+    },
+    "about_us_nav": {
+      "name": "About Us - Nav",
+      "locator": "//span[@id='about-header-option-open-button']/div/div",
+      "type": "xpath"
+    },
+    "why_multibank": {
+      "name": "Why Multibank Link",
+      "locator": "//a[@href='https://multibank.io/about/why-multibank']",
+      "type": "xpath"
+    }
+  },
+  "Why Multibank Page": {
+    "hero_carousel": {
+      "name": "Hero Banner Carousel",
+      "locator": "//div[contains(@class, 'swiper-wrapper')]",
+      "type": "xpath"
+    },
+    "hero_slides": {
+      "name": "Hero Banner Slides",
+      "locator": "//div[contains(@class, 'bannerSlide_bannerSlideWrapper')]",
+      "type": "xpath"
+    },
+    "advantages_section": {
+      "name": "Our Advantages Section",
+      "locator": "//div[contains(@class, 'our-advantages_content')]",
+      "type": "xpath"
+    },
+    "advantages_subtitle_h5": {
+      "name": "Advantages Section Subtitle (h5)",
+      "locator": "//div[contains(@class, 'our-advantages_content')]//h5",
+      "type": "xpath"
+    },
+    "advantages_title_h2": {
+      "name": "Advantages Section Title (h2)",
+      "locator": "//div[contains(@class, 'our-advantages_content')]//h2",
+      "type": "xpath"
+    },
+    "advantage_cards": {
+      "name": "Advantage Cards (all 5)",
+      "locator": "//h3[contains(text(), 'Fiat On and Off  Ramp') or contains(text(), 'Heavily Regulated') or contains(text(), 'Security of Funds') or contains(text(), 'Crypto Currencies') or contains(text(), 'Customer Service')]",
+      "type": "xpath"
+    },
+    "card_fiat": {
+      "name": "Fiat On and Off Ramp Card",
+      "locator": "//h3[contains(text(),'Fiat On and Off  Ramp')]",
+      "type": "xpath"
+    },
+    "card_regulated": {
+      "name": "Heavily Regulated Card",
+      "locator": "//h3[contains(text(), 'Heavily Regulated')]",
+      "type": "xpath"
+    },
+    "card_security": {
+      "name": "Security of Funds Card",
+      "locator": "//h3[contains(text(), 'Security of Funds')]",
+      "type": "xpath"
+    },
+    "card_crypto": {
+      "name": "Crypto Currencies Card",
+      "locator": "//h3[contains(text(), 'Crypto Currencies')]",
+      "type": "xpath"
+    },
+    "card_service": {
+      "name": "Customer Service Card",
+      "locator": "//h3[contains(text(), 'Customer Service')]",
+      "type": "xpath"
+    },
+    "trading_opportunity_h3": {
+      "name": "Trading Opportunity Section",
+      "locator": "//h3[contains(text(), 'Catch Your Next Trading Opportunity')]",
+      "type": "xpath"
+    }
+  }
+}
