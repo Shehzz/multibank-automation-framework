@@ -2,8 +2,6 @@
 Home Page Object for https://trade.multibank.io/
 Contains all elements and methods related to the home/landing page.
 """
-import time
-
 from playwright.sync_api import Page
 from pages.base_page import BasePage
 from resources.locators.home_locators import HomeLocators
@@ -29,7 +27,6 @@ class HomePage(BasePage):
 
     def load(self):
         """Navigate to the home page and wait for it to load."""
-        #logger.info(f"Loading home page: {self.base_url}")
         self.navigate(self.base_url)
         # Can pick any 1, starting from the slowest (8s, 4s, 3s) to the fastest
         # self.wait_until_page_fully_loads()
@@ -495,22 +492,24 @@ class HomePage(BasePage):
     # Marketing Banners Methods
     # ============================================
 
-    def scroll_to_bottom(self):
-        """Scroll to the bottom of the page."""
-        logger.info("Scrolling to page bottom")
-        self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-        #self.wait_for_load_state("networkidle")
-        #Instead wait for some element that appears in the bottom
+    def scroll_to_banner_section(self):
+        """Scroll to the marketing banner section at the bottom of the page."""
+        logger.info("Scrolling to marketing banner section")
+        self.wait_until_page_fully_loads(key_elements=[self.locators.banner_section])
+        self.scroll_to_element(self.locators.banner_section, align_to_top=False)
+        self.wait_for_element(self.locators.banner_section, "visible")
+        logger.info("Successfully scrolled to banner section")
 
     def are_banners_displayed(self) -> bool:
         """
-        Check if marketing banners are displayed.
+        Check if marketing banners are displayed at the bottom of the page.
 
         Returns:
             True if banners are visible
         """
-        self.scroll_to_bottom()
-        is_visible = self.is_visible(self.locators.banner_section, timeout=10000)
+        logger.info("Checking if marketing banners are displayed")
+        self.scroll_to_banner_section()
+        is_visible = self.is_visible(self.locators.banner_section)
         logger.info(f"Marketing banners visible: {is_visible}")
         return is_visible
 
@@ -519,9 +518,9 @@ class HomePage(BasePage):
         Get count of marketing banners.
 
         Returns:
-            Number of banners
+            Number of banners (should be 9)
         """
-        self.scroll_to_bottom()
+        logger.info("Counting marketing banners")
         count = self.get_element_count(self.locators.banner_items)
         logger.info(f"Found {count} marketing banners")
         return count
@@ -538,7 +537,7 @@ class HomePage(BasePage):
             App Store URL or None
         """
         try:
-            self.scroll_to_bottom()
+            self.scroll_to_banner_section()
             link = self.get_attribute(self.locators.app_store_link, "href")
             logger.info(f"App Store link: {link}")
             return link
@@ -554,7 +553,7 @@ class HomePage(BasePage):
             Google Play URL or None
         """
         try:
-            self.scroll_to_bottom()
+            self.scroll_to_banner_section()
             link = self.get_attribute(self.locators.google_play_link, "href")
             logger.info(f"Google Play link: {link}")
             return link
@@ -562,32 +561,55 @@ class HomePage(BasePage):
             logger.warning(f"Google Play link not found: {e}")
             return None
 
-    def verify_download_links(self) -> dict:
+    def verify_download_links(self, expected_app_store: str = None, expected_google_play: str = None) -> dict:
         """
-        Verify both download links exist and are valid.
+        Verify both download links exist and contain expected patterns.
+
+        Args:
+            expected_app_store: Expected URL pattern for App Store (default: 'apps.apple.com')
+            expected_google_play: Expected URL pattern for Google Play (default: 'play.google.com')
 
         Returns:
             Dictionary with verification results
         """
         logger.info("Verifying download links")
 
-        app_store = self.get_app_store_link()
-        google_play = self.get_google_play_link()
+        # Get actual URLs
+        app_store_url = self.get_app_store_link()
+        google_play_url = self.get_google_play_link()
 
+        # Use default patterns if not provided
+        app_store_pattern = expected_app_store or 'apps.apple.com'
+        google_play_pattern = expected_google_play or 'play.google.com'
+
+        # Validate App Store link
+        app_store_exists = app_store_url is not None
+        app_store_valid = app_store_pattern in app_store_url if app_store_url else False
+
+        # Validate Google Play link
+        google_play_exists = google_play_url is not None
+        google_play_valid = google_play_pattern in google_play_url if google_play_url else False
+
+        # Build clean results dictionary
         results = {
             'app_store': {
-                'exists': app_store is not None,
-                'valid': app_store and ('apple.com' in app_store or 'itunes' in app_store) if app_store else False,
-                'url': app_store
+                'exists': app_store_exists,
+                'valid': app_store_valid,
+                'url': app_store_url,
+                'expected_pattern': app_store_pattern
             },
             'google_play': {
-                'exists': google_play is not None,
-                'valid': google_play and 'play.google.com' in google_play if google_play else False,
-                'url': google_play
+                'exists': google_play_exists,
+                'valid': google_play_valid,
+                'url': google_play_url,
+                'expected_pattern': google_play_pattern
             }
         }
 
-        logger.info(f"Download links verification: {results}")
+        # Log results
+        logger.info(f"App Store - Exists: {app_store_exists}, Valid: {app_store_valid}, URL: {app_store_url}")
+        logger.info(f"Google Play - Exists: {google_play_exists}, Valid: {google_play_valid}, URL: {google_play_url}")
+
         return results
 
     # ============================================
@@ -604,7 +626,6 @@ class HomePage(BasePage):
         try:
             if self.is_visible(self.locators.about_us_nav):
                 self.hover(self.locators.about_us_nav)
-                #self.page.wait_for_timeout(500)  # Brief wait for dropdown
 
             # Click Why Multibank
             self.wait_for_element(self.locators.why_multibank, "visible")
