@@ -89,7 +89,7 @@ multibank-automation-framework/
 ### Step 1: Clone the Repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Shehzz/multibank-automation-framework
 cd multibank-automation-framework
 ```
 
