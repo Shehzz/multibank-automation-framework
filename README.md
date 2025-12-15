@@ -13,7 +13,7 @@ This framework implements the Page Object Model (POM) design pattern with **exte
 - Navigation and Layout validation
 - Trading functionality (spot trading, trading pairs, categories)
 - Content validation (marketing banners, download links)
-- About Us → Why MultiLink page content
+- About Us → Why MultiBank page content
 
 ## ✨ Key Features
 
@@ -22,13 +22,12 @@ This framework implements the Page Object Model (POM) design pattern with **exte
 - **External Locator Management**: All locators stored in JSON files (production-ready approach)
 - **XPath Locators**: Reliable XPath-based element identification
 - **Cross-Browser Support**: Tests run on Chromium, Firefox, and WebKit
-- **Build Automation**: setup.py, pyproject.toml, and Makefile (like Maven/Gradle)
 - **Data-Driven**: External test data management (no hard-coded assertions)
 - **Smart Waits**: Auto-waiting with Playwright (no flaky time.sleep())
-- **Rich Reporting**: HTML reports + Allure reports with screenshots on failure
+- **Rich Reporting**: Allure reports with screenshots on failure
 - **Accessibility Testing**: WCAG 2.1 compliance checks using axe-core
 - **Performance Testing**: Automated page load and resource optimization metrics
-- **Parallel Execution**: Configurable parallel test execution via .env
+- **Parallel Execution**: Configurable parallel test execution
 - **Professional Logging**: Comprehensive logging for debugging
 - **Type Hints**: Python type annotations throughout
 
@@ -158,14 +157,7 @@ PARALLEL_WORKERS=4
 ./run_tests.sh tests/
 ```
 
-**What it checks:**
-- ✅ Color contrast ratios
-- ✅ Keyboard navigation
-- ✅ Screen reader compatibility
-- ✅ ARIA labels and roles
-- ✅ Form accessibility
-- ✅ Image alt text
-- ✅ Heading structure
+---
 
 ## 📊 Viewing Test Reports
 
@@ -183,22 +175,6 @@ This opens a beautiful interactive report in your browser with:
 - 🏷️ Test categorization
 - 📊 Visual analytics
 
-**Example output:**
-```
-Performance Metrics:
-  DNS Lookup: 45ms
-  TCP Connect: 67ms
-  Request Time: 123ms
-  Response Time: 234ms
-  DOM Load: 456ms
-  Page Load: 2341ms
-  Time to Interactive: 1876ms
-  
-✓ Homepage loaded in 2.34s
-```
-
-### Using Environment Variables
-
 ### HTML Report (Alternative)
 
 The test runner also generates a simple HTML report:
@@ -208,30 +184,7 @@ start reports/report.html # Windows
 xdg-open reports/report.html # Linux
 ```
 
-## 🎨 Test Markers
-
-Tests are organized using pytest markers:
-
-- `@pytest.mark.smoke` - Quick smoke tests for critical paths
-- `@pytest.mark.regression` - Full regression test suite
-- `@pytest.mark.navigation` - Navigation-related tests
-- `@pytest.mark.trading` - Trading functionality tests
-- `@pytest.mark.content` - Content validation tests
-- `@pytest.mark.cross_browser` - Cross-browser compatibility tests
-- `@pytest.mark.accessibility` - Accessibility compliance tests (WCAG 2.1)
-- `@pytest.mark.performance` - Performance and load time tests
-
-**Run tests by marker:**
-```bash
-# Accessibility tests
-./run_tests.sh -m accessibility
-
-# Performance tests
-./run_tests.sh -m performance
-
-# Both accessibility and performance
-./run_tests.sh -m "accessibility or performance"
-```
+---
 
 ## ⚙️ Configuration
 
@@ -367,7 +320,7 @@ def test_navigation_menu(home_page):
 - ✅ Non-technical team members can update locators
 - ✅ Production-ready architecture
 
-### Test Data
+---
 
 ## 📝 Task 2: String Character Frequency
 
@@ -429,28 +382,7 @@ Automated performance metrics and assertions:
 - 📥 Request/response time
 - 📦 Resource counts
 
-### Why XPath Over CSS?
-
-- **Reliability**: More robust for complex DOM structures
-- **Text-based selection**: Can locate by visible text
-- **Flexibility**: Better handling of dynamic elements
-- **Industry standard**: Widely used in enterprise automation
-
-### Why Playwright?
-
-1. **Auto-waiting**: Built-in smart waits eliminate flaky tests
-2. **Speed**: Faster execution compared to Selenium
-3. **Modern**: Supports modern web features (WebSockets, SPA)
-4. **Cross-Browser**: Single API for Chromium, Firefox, WebKit
-5. **Developer Experience**: Excellent debugging tools (trace viewer)
-
-### Design Patterns Used
-
-- **Page Object Model**: Encapsulates page elements and interactions
-- **Repository Pattern**: Locators stored in external repository (JSON)
-- **Fixture Pattern**: Pytest fixtures for setup/teardown
-- **Data-Driven Testing**: External JSON for test data
-- **Factory Pattern**: Browser and page creation
+---
 
 ## 🔍 Adding New Tests
 
@@ -490,7 +422,6 @@ from resources.locators.new_page_locators import NewPageLocators
 class NewPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
-        self.base_url = base_url
         self.locators = NewPageLocators()
     
     def submit_form(self):
@@ -547,14 +478,7 @@ cp .env.example .env
 playwright install
 ```
 
-## 📦 Building Distribution Package
-
-```bash
-# Build package
-make build
-
-# Output: dist/multibank-automation-framework-1.0.0.tar.gz
-```
+---
 
 ## 🎓 Best Practices Implemented
 
@@ -571,11 +495,7 @@ make build
 ✅ **Performance Testing** - Automated performance metrics  
 ✅ **Parallel Execution** - Fast test execution  
 
-This framework includes several advanced features:
-
-- **Advanced Reporting** - Allure reports with execution trends and analytics
-- **Accessibility Testing** - Automated WCAG 2.1 compliance checks
-- **Performance Testing** - Page load time and resource optimization metrics
+---
 
 ## 👥 Author
 
