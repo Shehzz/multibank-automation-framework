@@ -26,6 +26,7 @@ class TestAccessibility:
         """
         logger.info("Test: Checking homepage accessibility")
 
+        loaded_home_page.wait_until_page_fully_loads()
         # Initialize accessibility checker
         a11y = AccessibilityChecker(loaded_home_page.page)
 
