@@ -91,7 +91,7 @@ def why_multibank_page(page: Page) -> WhyMultibankPage:
         WhyMultibankPage instance
     """
     logger.info(f"Creating WhyMultibankPage object")
-    return WhyMultibankPage(page, BASE_URL)
+    return WhyMultibankPage(page)
 
 @pytest.fixture(scope="function")
 def loaded_home_page(home_page):
@@ -138,6 +138,7 @@ def log_test_info(request):
 def pytest_runtest_makereport(item, call):
     """
     Hook to capture test failures and take screenshots.
+    Attaches screenshots to Allure reports.
     """
     outcome = yield
     rep = outcome.get_result()
@@ -152,9 +153,20 @@ def pytest_runtest_makereport(item, call):
 
                 try:
                     from config.settings import SCREENSHOTS_DIR
+                    import allure
+
                     screenshot_path = SCREENSHOTS_DIR / f"{screenshot_name}.png"
                     page.screenshot(path=str(screenshot_path), full_page=True)
                     logger.info(f"Screenshot saved: {screenshot_path}")
+
+                    # Attach screenshot to Allure report
+                    allure.attach.file(
+                        str(screenshot_path),
+                        name=screenshot_name,
+                        attachment_type=allure.attachment_type.PNG
+                    )
+                    logger.info(f"Screenshot attached to Allure report: {screenshot_name}")
+
                 except Exception as e:
                     logger.error(f"Failed to capture screenshot: {e}")
 
