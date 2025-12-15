@@ -5,7 +5,7 @@
         test-trading test-accessibility test-performance test-content test-parallel test-firefox \
         test-chromium test-webkit test-cross-browser coverage allure-serve allure-generate \
         allure-open clean lint format type-check build browsers check run-string-frequency \
-        ci-test ci-coverage dev-setup quick-test setup
+        dev-setup quick-test setup
 
 # Default target
 help:
@@ -226,15 +226,6 @@ check:
 run-string-frequency:
 	@echo "Running string frequency script..."
 	python utils/string_frequency.py
-
-# CI/CD targets
-ci-test:
-	@echo "Running CI tests..."
-	pytest --browser chromium --browser firefox -v --html=reports/ci-report.html
-
-ci-coverage:
-	@echo "Running CI with coverage..."
-	pytest --cov=pages --cov=utils --cov-report=xml --cov-report=term
 
 # Development workflow
 dev-setup: install-dev

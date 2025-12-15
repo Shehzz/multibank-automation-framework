@@ -28,7 +28,6 @@ This framework implements the Page Object Model (POM) design pattern with **exte
 - **Rich Reporting**: HTML reports + Allure reports with screenshots on failure
 - **Accessibility Testing**: WCAG 2.1 compliance checks using axe-core
 - **Performance Testing**: Automated page load and resource optimization metrics
-- **CI/CD Ready**: GitHub Actions workflow included
 - **Parallel Execution**: Configurable parallel test execution via .env
 - **Professional Logging**: Comprehensive logging for debugging
 - **Type Hints**: Python type annotations throughout
@@ -37,9 +36,6 @@ This framework implements the Page Object Model (POM) design pattern with **exte
 
 ```
 multibank-automation-framework/
-├── .github/                    # CI/CD configuration
-│   └── workflows/
-│       └── test-automation.yml # GitHub Actions workflow
 ├── Makefile                    # Build commands (make test, make build)
 ├── requirements.txt            # Python dependencies
 ├── pytest.ini                  # Pytest configuration
@@ -710,22 +706,6 @@ pytest tests/test_string_frequency.py -v
 
 # Or using Makefile
 make run-string-frequency
-```
-
-## 🚀 CI/CD Integration
-
-### GitHub Actions
-
-Workflow file: `.github/workflows/test-automation.yml`
-
-### CI Commands
-
-```bash
-# Run CI tests
-make ci-test
-
-# Run with coverage
-make ci-coverage
 ```
 
 ## 📦 Building Distribution Package
